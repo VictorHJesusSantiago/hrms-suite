@@ -1,0 +1,13 @@
+const api = async (path, options) => { const response = await fetch(path, options); const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Falha na API'); return data; };
+const money = value => new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value || 0);
+async function loadDashboard(){
+  const [dashboard, people, modules, candidates, health] = await Promise.all([api('/api/dashboard'),api('/api/people'),api('/api/modules'),api('/api/candidates'),api('/api/health')]);
+  document.querySelector('#health').textContent = health.status === 'ok' ? '● online' : 'indisponível';
+  document.querySelector('#metrics').innerHTML = Object.entries({Colaboradores:dashboard.counts.employees,'Candidatos ativos':dashboard.counts.open_candidates,'Benefícios ativos':dashboard.counts.active_benefits,'Cursos LMS':dashboard.counts.learning_courses}).map(([label,value])=>`<div class="metric"><strong>${value}</strong><span>${label}</span></div>`).join('');
+  document.querySelector('#people').innerHTML = `<table><thead><tr><th>Nome</th><th>Área</th><th>Função</th><th>Salário</th></tr></thead><tbody>${people.map(p=>`<tr><td>${p.name}</td><td>${p.department}</td><td>${p.role}</td><td>${money(p.salary)}</td></tr>`).join('')}</tbody></table>`;
+  document.querySelector('#modules').innerHTML = modules.modules.map(m=>`<div class="module"><b>${m.label}</b><span>${m.count} recursos operacionais</span></div>`).join('');
+  document.querySelector('#candidates').innerHTML = candidates.map(c=>`<div class="candidate"><span><b>${c.name}</b><br><small>${c.job_title}</small></span><span>${c.stage} · ${c.score} pts</span></div>`).join('');
+}
+async function previewPayroll(){ try { const people = await api('/api/people'); const result = await api('/api/payroll/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({employee_id:people[0].id,bonus:500})}); alert(`Folha de ${result.employee.name}: líquido ${money(result.net)}`); } catch(error){ alert(error.message); } }
+async function sendFeedback(event){ event.preventDefault(); const result = document.querySelector('#feedback-result'); try { await api('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({category:document.querySelector('#category').value,message:document.querySelector('#message').value})}); result.textContent='Feedback registrado com sucesso.'; event.target.reset(); } catch(error){ result.textContent=error.message; } }
+loadDashboard().catch(error=>{document.querySelector('#health').textContent='erro: '+error.message;});

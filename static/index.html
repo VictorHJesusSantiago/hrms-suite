@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>HRMS Suite</title><link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar"><div><span class="eyebrow">PEOPLE OPERATIONS</span><h1>HRMS Suite</h1></div><span id="health" class="status">conectando…</span></header>
+  <main>
+    <section class="hero"><div><p class="eyebrow">CENTRO DE CONTROLE</p><h2>Visão humana, operação precisa.</h2><p>Folha, talentos e experiência em um único espaço operacional.</p></div><button class="primary" onclick="loadDashboard()">Atualizar dados</button></section>
+    <section id="metrics" class="metrics"></section>
+    <div class="layout"><section class="panel"><div class="panel-head"><div><p class="eyebrow">PESSOAS</p><h3>Colaboradores</h3></div><button onclick="previewPayroll()">Simular folha</button></div><div id="people" class="table-wrap"></div></section>
+    <section class="panel"><div class="panel-head"><div><p class="eyebrow">CAPACIDADES</p><h3>Catálogo de módulos</h3></div></div><div id="modules" class="module-grid"></div></section></div>
+    <section class="panel action-panel"><div><p class="eyebrow">EMPLOYEE EXPERIENCE</p><h3>Enviar feedback</h3></div><form onsubmit="sendFeedback(event)"><select id="category"><option>liderança</option><option>benefícios</option><option>ambiente</option><option>aprendizagem</option></select><input id="message" placeholder="O que está funcionando bem ou pode melhorar?" required><button class="primary">Enviar</button></form><p id="feedback-result" class="hint"></p></section>
+    <section class="panel"><div class="panel-head"><div><p class="eyebrow">ATS</p><h3>Candidatos recentes</h3></div></div><div id="candidates" class="candidate-list"></div></section>
+  </main><script src="/static/app.js"></script>
+</body></html>
