@@ -53,3 +53,22 @@ def submit_feedback(employee_id: int | None, category: str, message: str) -> dic
         raise ValueError("A mensagem é obrigatória")
     sentiment = "positive" if any(word in message.lower() for word in ("obrigado", "ótimo", "gosto", "bom")) else "neutral"
     return insert("feedback", {"employee_id": employee_id, "category": category, "message": message.strip(), "sentiment": sentiment, "created_at": utc_now()})
+
+
+def run_payroll(period: str, bonus: float = 0) -> dict:
+    if not period.strip():
+        raise ValueError("O período da folha é obrigatório")
+    employees = rows("SELECT * FROM employees WHERE status = 'active' ORDER BY id")
+    items = [preview_payroll(employee["id"], bonus) for employee in employees]
+    gross = round(sum(item["gross"] for item in items), 2)
+    deductions = round(sum(item["deductions"] for item in items), 2)
+    net = round(sum(item["net"] for item in items), 2)
+    run = insert("payroll_runs", {"period": period, "gross": gross, "deductions": deductions, "net": net, "status": "processed", "created_at": utc_now()})
+    return {"run": run, "items": items, "employee_count": len(items)}
+
+
+def add_employee(payload: dict) -> dict:
+    required = ("name", "email", "department", "role", "salary")
+    if any(not payload.get(field) for field in required):
+        raise ValueError("name, email, department, role e salary são obrigatórios")
+    return insert("employees", {**payload, "salary": float(payload["salary"]), "status": payload.get("status", "active")})

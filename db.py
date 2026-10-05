@@ -14,6 +14,10 @@ CREATE TABLE IF NOT EXISTS courses (id INTEGER PRIMARY KEY, title TEXT NOT NULL,
 CREATE TABLE IF NOT EXISTS performance_reviews (id INTEGER PRIMARY KEY, employee_id INTEGER NOT NULL, cycle TEXT NOT NULL, score REAL NOT NULL, status TEXT NOT NULL, FOREIGN KEY(employee_id) REFERENCES employees(id));
 CREATE TABLE IF NOT EXISTS shifts (id INTEGER PRIMARY KEY, employee_id INTEGER NOT NULL, starts_at TEXT NOT NULL, ends_at TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'planned', FOREIGN KEY(employee_id) REFERENCES employees(id));
 CREATE TABLE IF NOT EXISTS feedback (id INTEGER PRIMARY KEY, employee_id INTEGER, category TEXT NOT NULL, message TEXT NOT NULL, sentiment TEXT NOT NULL, created_at TEXT NOT NULL, FOREIGN KEY(employee_id) REFERENCES employees(id));
+CREATE TABLE IF NOT EXISTS domain_records (id INTEGER PRIMARY KEY, module TEXT NOT NULL, resource TEXT NOT NULL, payload TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'active', created_at TEXT NOT NULL, updated_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_domain_records_lookup ON domain_records(module, resource, status, id);
+CREATE TABLE IF NOT EXISTS audit_events (id INTEGER PRIMARY KEY, module TEXT NOT NULL, resource TEXT NOT NULL, record_id INTEGER, action TEXT NOT NULL, details TEXT NOT NULL, created_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_audit_events_created ON audit_events(created_at DESC);
 """
 
 

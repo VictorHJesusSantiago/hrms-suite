@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>HRMS Suite</title><link rel="stylesheet" href="/static/styles.css">
+  <title>HRMS Suite</title><link rel="stylesheet" href="/static/styles.css"><link rel="stylesheet" href="/static/console.css">
 </head>
 <body>
   <header class="topbar"><div><span class="eyebrow">PEOPLE OPERATIONS</span><h1>HRMS Suite</h1></div><span id="health" class="status">conectando…</span></header>
@@ -13,5 +13,6 @@
     <section class="panel"><div class="panel-head"><div><p class="eyebrow">CAPACIDADES</p><h3>Catálogo de módulos</h3></div></div><div id="modules" class="module-grid"></div></section></div>
     <section class="panel action-panel"><div><p class="eyebrow">EMPLOYEE EXPERIENCE</p><h3>Enviar feedback</h3></div><form onsubmit="sendFeedback(event)"><select id="category"><option>liderança</option><option>benefícios</option><option>ambiente</option><option>aprendizagem</option></select><input id="message" placeholder="O que está funcionando bem ou pode melhorar?" required><button class="primary">Enviar</button></form><p id="feedback-result" class="hint"></p></section>
     <section class="panel"><div class="panel-head"><div><p class="eyebrow">ATS</p><h3>Candidatos recentes</h3></div></div><div id="candidates" class="candidate-list"></div></section>
+    <section class="panel"><div class="panel-head"><div><p class="eyebrow">OPERAÇÃO MODULAR</p><h3>Console de recursos</h3><p class="hint">Acesse qualquer recurso dos doze módulos com validação e auditoria.</p></div></div><div class="resource-toolbar"><select id="module-select"></select><select id="resource-select"></select><button onclick="loadRecords()">Listar</button></div><form class="json-form" onsubmit="createRecord(event)"><textarea id="record-json" spellcheck="false">{"employee_id":1}</textarea><button class="primary">Criar registro</button></form><pre id="resource-result" class="result-box">Selecione um recurso.</pre></section>
   </main><script src="/static/app.js"></script>
 </body></html>
